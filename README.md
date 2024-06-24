@@ -1,17 +1,17 @@
-
+***************************
 Problem:
-***************************
+
 APPLICATION FAILED TO START
-***************************
+
 
 Description:
 
 The dependencies of some of the beans in the application context form a cycle:
 
 ┌─────┐
-|  securityConfig defined in file [C:\Users\user\Desktop\RegAndLogWithSecure\target\classes\com\example\RegAndLogWithSecure\userThings\SecurityConfig.class]
+|  securityConfig defined in file [C:\...\SecurityConfig.class]
 ↑     ↓
-|  userService defined in file [C:\Users\user\Desktop\RegAndLogWithSecure\target\classes\com\example\RegAndLogWithSecure\userThings\UserService.class]
+|  userService defined in file [C:\...\UserService.class]
 └─────┘
 
 
@@ -28,3 +28,4 @@ Solution: add @Lazy in constructor
     public SecurityConfig(@Lazy UserService userService) {
         this.userService = userService;
     }
+***************************
