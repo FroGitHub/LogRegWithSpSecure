@@ -1,6 +1,7 @@
 package com.example.RegAndLogWithSecure.userThings;
 
 import jakarta.persistence.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
 @Entity

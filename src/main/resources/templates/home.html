@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Home</title>
+</head>
+<body>
+  <h1>Welcome to the Home Page</h1>
+    <div th:if="${isAuthenticated}">
+      <p>Logged in as: <span th:text="${username}">Username</span></p>
+      <a th:href="@{/protected}">Protected Page</a> |
+      <a th:href="@{/logout}">Logout</a>
+    </div>
+
+    <div th:if="${!isAuthenticated}">
+      <a th:href="@{/login}">Login</a>
+      <a th:href="@{/register}">reg</a>
+    </div>
+
+
+  </body>
+</html>

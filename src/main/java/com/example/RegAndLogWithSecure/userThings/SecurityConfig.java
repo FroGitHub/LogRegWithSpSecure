@@ -44,16 +44,20 @@ public class SecurityConfig  {
     }
 
     @Bean
+    public PasswordEncoder encoder() {
+        return new BCryptPasswordEncoder();
+    }
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/user").hasRole("USER")
-                        .requestMatchers("/admin").hasRole("ADMIN")
-                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/protected").hasRole("ADMIN")
+                        .requestMatchers("/", "/home").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults())
-                .formLogin(withDefaults());
+                .formLogin(form -> form.loginPage("/login").permitAll());
         return http.build();
     }
 
@@ -70,7 +74,7 @@ public class SecurityConfig  {
                     .build());
         }
 
-        UserDetails user1 = User.withDefaultPasswordEncoder().username("admin2").password("admin2").roles("ADMIN").build();
+        UserDetails user1 = User.withDefaultPasswordEncoder().username("admin2").password("admin2").roles("USER").build();
         usersList.add(user1);
         return new InMemoryUserDetailsManager(usersList);
     }

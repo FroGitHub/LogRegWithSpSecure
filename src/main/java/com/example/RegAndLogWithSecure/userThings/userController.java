@@ -2,13 +2,16 @@ package com.example.RegAndLogWithSecure.userThings;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping
 public class userController {
 
@@ -16,10 +19,27 @@ public class userController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/home")
-    public List<Users> home(){
+    @GetMapping("/")
+    public String home(Model model){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken)) {
+            String username = auth.getName();
+            model.addAttribute("username", username);
+            model.addAttribute("isAuthenticated", true);
+        } else {
+            model.addAttribute("isAuthenticated", false);
+        }
+        return "home";
+    }
 
-        return userService.getUsers();
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
+    @GetMapping("/protected")
+    public String protectedPage(){
+        return "protected";
     }
 
 
@@ -31,7 +51,7 @@ public class userController {
 
     @PostMapping("/register")
     public String registerUser(@ModelAttribute Users user) {
-        user.setRole("ROLE_USER");
+        user.setRole("USER");
         userService.save(user);
         return "redirect:/login";
     }
